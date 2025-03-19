@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up / Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="header">
+        <h1>Sign Up / Login</h1>
+        <a href="index.html">Back to Home</a>
+    </div>
+
+    <div class="form-container">
+        <h3>Sign Up</h3>
+        <form id="userForm">
+            <label>Username:</label>
+            <input type="text" id="username" required>
+
+            <label>Password:</label>
+            <input type="password" id="password" required>
+
+            <label>Name:</label>
+            <input type="text" id="name" required>
+
+            <label>Age:</label>
+            <input type="number" id="age" required>
+
+            <label>Gender:</label>
+            <select id="gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label>Class:</label>
+            <input type="text" id="class" required>
+
+            <label>Country:</label>
+            <input type="text" id="country" required>
+
+            <label>State:</label>
+            <input type="text" id="state" required>
+
+            <label>City:</label>
+            <input type="text" id="city" required>
+
+            <h4>Parent Details</h4>
+            <label>Parent's Name:</label>
+            <input type="text" id="parent_name" required>
+
+            <label>Parent's Occupation:</label>
+            <input type="text" id="parent_occupation" required>
+
+            <label>Financial Status:</label>
+            <select id="financial_status" required>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div class="form-container">
+        <h3>Login</h3>
+        <form id="loginForm">
+            <label>Username:</label>
+            <input type="text" id="loginUsername" required>
+
+            <label>Password:</label>
+            <input type="password" id="loginPassword" required>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <script>
+        // document.getElementById('loginForm').addEventListener('submit', function (event) {
+        //     event.preventDefault();
+
+        //     let loginData = {
+        //         username: document.getElementById("loginUsername").value,
+        //         password: document.getElementById("loginPassword").value
+        //     };
+
+        //     fetch('http://127.0.0.1:5000/login', {
+        //         method: "POST",
+        //         headers: { "Content-Type": "application/json" },
+        //         body: JSON.stringify(loginData)
+        //     })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             console.log("✅ Server Response:", data);
+        //             if (data.success) {
+        //                 alert("Login successful! Redirecting...");
+        //                 window.location.href = "home.html";
+        //             } else {
+        //                 alert("Error: " + data.error);
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('❌ Fetch Error:', error);
+        //             alert("Something went wrong! Please try again.");
+        //         });
+        // });
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            let loginData = {
+                username: document.getElementById("loginUsername").value,
+                password: document.getElementById("loginPassword").value
+            };
+
+            fetch('http://127.0.0.1:5000/login', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(loginData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("✅ Server Response:", data);
+                    if (data.success) {
+                        console.log(`User Logged In: ID=${data.user_id}, Username=${loginData.username}`);
+                        alert("Login successful! Redirecting...");
+                        window.location.href = "home.html";
+                    } else {
+                        alert("Error: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Fetch Error:', error);
+                    alert("Something went wrong! Please try again.");
+                });
+        });
+
+    </script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

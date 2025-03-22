@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Learning Platform</title>
+     <!-- textillate -->
+    <link rel="stylesheet" href="assets/textillate/animate.css">
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+    <section class="web-learning " >
+        <!-- Header Section -->
+        <header class="header">
+            <h1>Personalized Learning Platform</h1>
+            <nav>
+                <ul class="menu">
+                    <li class="dropdown">
+                        <a href="#">Services ▼</a>
+                        <ul class="dropdown-content">
+                            <li><a href="#">K12 Online Accreditation</a></li>
+                            <li><a href="#">Parent & Student Resources</a></li>
+                            <li><a href="#">Types of Learners We Serve</a></li>
+                            <li><a href="#">Meet the Teachers</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Resources ▼</a>
+                        <ul class="dropdown-content">
+                            <li><a href="#">Elementary School (Grades K-5)</a></li>
+                            <li><a href="#">Middle School (Grades 6-8)</a></li>
+                            <li><a href="#">High School (Grades 9-12)</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="signup.html" id="signUp">Login / Sign Up</a></li>
+                    <li class="bot"><i class="fa-solid fa-robot"></i></li>
+                    <a href="#">Dought assistance</a>
+                    <li> welcome<span id="username"></span></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Introduction Section -->
+        <section class="container">
+            <h2>Welcome to Our Personalized Learning Platform!</h2>
+            <p>Select a course to begin your learning journey with AI-powered recommendations.</p>
+        </section>
+
+        <!-- Course Selection -->
+        <section class="shopping">
+            <div class="course-box" onclick="startAssessment('chemistry')">
+                <h2>Chemistry</h2>
+                <div class="course-img"
+                    style="background-image: url('https://schoolgist.ng/storage/postFiles/Science-Courses-you-can-study-with-pass-in-Chemistry.jpg');">
+                </div>
+                <button>Enroll Now</button>
+            </div>
+
+            <div class="course-box" onclick="startAssessment('physics')">
+                <h2>Physics</h2>
+                <div class="course-img"
+                    style="background-image: url('https://th.bing.com/th/id/OIP.VChUbuBXWkRaRLmXmI3h8QHaH5?rs=1&pid=ImgDetMain');">
+                </div>
+                <button>Enroll Now</button>
+            </div>
+
+            <div class="course-box" onclick="startAssessment('python')">
+                <h2>Basics of Python</h2>
+                <div class="course-img"
+                    style="background-image: url('https://i.ytimg.com/vi/HyPsngKYBu4/maxresdefault.jpg');"></div>
+                <button>Enroll Now</button>
+            </div>
+
+            <div class="course-box" onclick="startAssessment('python')">
+                <h2>English</h2>
+                <div class="course-img"
+                    style="background-image: url('https://th.bing.com/th/id/OIP.g2UJM5cUySD4c4_0tIDavgHaEW?w=315&h=185&c=7&r=0&o=5&dpr=1.3&pid=1.7');">
+                </div>
+                <button>Enroll Now</button>
+            </div>
+
+            <div class="course-box" onclick="startAssessment('python')">
+                <h2>Communication Skills</h2>
+                <div class="course-img"
+                    style="background-image: url('https://th.bing.com/th/id/OIP.6vOxMqGd5CU4BDGiPaso0wHaEW?w=312&h=184&c=7&r=0&o=5&dpr=1.3&pid=1.7');">
+                </div>
+                <button>Enroll Now</button>
+            </div>
+
+            <div class="course-box" onclick="startAssessment('python')">
+                <h2>Social Studies</h2>
+                <div class="course-img"
+                    style="background-image: url('https://th.bing.com/th/id/OIP.ol6sUhatg_bz2o89HYPBVgHaEK?w=332&h=187&c=7&r=0&o=5&dpr=1.3&pid=1.7');">
+                </div>
+                <button>Enroll Now</button>
+            </div>
+            <div class="course-box" onclick="startAssessment('python')">
+                <h2>ARTS</h2>
+                <div class="course-img"
+                    style="background-image: url('https://th.bing.com/th/id/OIP.xwaE0OcFXquZpN7arI56pQHaE7?w=248&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7');">
+                </div>
+                <button>Enroll Now</button>
+            </div>
+            <div class="course-box" onclick="startAssessment('python')">
+                <h2>Health / Physical Education</h2>
+                <div class="course-img"
+                    style="background-image: url('https://3.bp.blogspot.com/-LDX8M7r8za4/UcptXxGdwfI/AAAAAAAADDs/KYqEGlcbob8/s1600/Health_PE.jpg');">
+                </div>
+                <button>Enroll Now</button>
+            </div>
+
+        </section>
+
+    </section>
+
+
+    <!-- jarvis -->
+
+
+    <section class="J-stucture " hidden>
+
+        <div class="in">
+            <div class="square ">
+                <div class="sq2"></div>
+                <div class="circle">
+                    <div class="inside">
+                        <div class="under ">
+                            <div id="center">
+                                <p>J.A.R.V.I.S</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="j-text">
+            <h3 class="jarvistext">Ask me anything</h3>
+        </div>
+        <!-- <div class="place">
+                    <div class="input borderN">
+                        <input placeholder="Ask Anything" class="search">
+                        <button id="mic"><i class="fa-solid fa-microphone border"></i></button>
+                        <button id="msg"><i class="fa-regular fa-comment-dots border"></i></button>
+                        <button id="settings"><i class="fa-solid fa-gear border"></i></button>
+                    </div>
+                </div> -->
+    </section>
+
+
+    <!-- SIRI WAVE -->
+
+
+    <section class="SiriWave" hidden>
+        <h2 class="Siritext">Hello, How Can I help You!</h2>
+        <div class="siri">
+
+            <div id="siri-container"></div>
+        </div>
+        <div class="place">
+            <div class="input borderN">
+                <!-- <input placeholder="Ask Anything" class="search"> -->
+                <input id="chat-input" placeholder="Ask Anything" class="search">
+                <button id="send"><i class="fa-solid fa-paper-plane"></i></button>
+                <button id="mic"><i class="fa-solid fa-microphone border"></i></button>
+                <button id="msg"><i class="fa-regular fa-comment-dots border"></i></button>
+                <button id="settings"><i class="fa-solid fa-gear border"></i></button>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- jquery cdn -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- siriwave -->
+    <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
+    <!-- texillate js files -->
+    <script src="assets/textillate/jquery.fittext.js"></script>
+    <script src="assets/textillate/jquery.lettering.js"></script>
+    <script src="assets/textillate/jquery.textillate.js"></script>
+
+
+    <script src="main.js"></script>
+    <script src="controller.js"></script>
+    <script src="/eel.js"></script>
+
+
+
+    <script>
+        fetch("http://127.0.0.1:5000/current_user")
+            .then(response => response.json())
+            .then(data => {
+                if (data.logged_in) {
+                    document.getElementById("username").innerText = data.user.name;
+                } else {
+                    alert("No active session. Redirecting to login.");
+                    window.location.href = "index.html";  // Redirect to login
+                }
+            })
+            .catch(error => console.error("Error:", error));
+
+        function logout() {
+            fetch("http://127.0.0.1:5000/logout", { method: "POST" })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    localStorage.removeItem("user");
+                    window.location.href = "index.html";
+                })
+                .catch(error => console.error("Error:", error));
+        }
+    </script>
+
+</body>
+
+</html>

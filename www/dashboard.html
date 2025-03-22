@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="dashboard.js"></script>
+</head>
+<body>
+    <h2>Welcome, <span id="student_name"></span></h2>
+    <p><strong>Assigned Course:</strong> <span id="assigned_course"></span></p>
+    <p><strong>Recommended Difficulty:</strong> <span id="recommended_course"></span></p>
+    <p><strong>Pre-Assessment Score:</strong> <span id="pre_assessment_score"></span></p>
+
+    <h3>Course Modules</h3>
+    <div id="course_modules"></div>
+
+    <h3>Update Your Post-Assessment Score</h3>
+    <input type="number" id="post_score" placeholder="Enter Post-Assessment Score">
+    <button onclick="updateLearning()">Update Progress</button>
+
+
+    
+</body>
+</html>

@@ -7,7 +7,7 @@
 # eel.init("www")
 
 # os.system('start msedge.exe --app="http://localhost:8080/home.html"')
-# # os.system('start msedge.exe --app="http://localhost:8080/app.py"')
+
 # eel.start('home.html', mode=None, host='localhost', port=8080, block=True)
 
 

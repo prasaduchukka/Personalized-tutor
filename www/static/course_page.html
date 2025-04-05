@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Course Header -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 py-2" id="course-title"></h1>
+            <h2 class="text-sm text-gray-500" id="course-description"></h2>
+
+            <div class="flex items-center mt-4">
+                <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div id="progress-bar" class="bg-blue-600 h-4 rounded-full" style="width: 0%"></div>
+                </div>
+                <span id="progress-text" class="ml-4 text-gray-600">0% Complete</span>
+            </div>
+        </div>
+
+        <!-- Learning Path Recommendation -->
+        <div id="path-recommendation" class="bg-white rounded-lg shadow-md p-6 mb-8 hidden">
+            <h2 class="text-xl font-semibold mb-4">Recommended Learning Path</h2>
+            <p id="path-description" class="mb-4"></p>
+            <div class="flex space-x-4">
+                <button id="accept-path" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Accept Recommendation
+                </button>
+                <button id="decline-path" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                    Choose Different Path
+                </button>
+            </div>
+        </div>
+
+        <!-- Modules List -->
+        <div class="bg-white p-6 rounded-xl shadow-xl">
+            <h3 class="text-2xl font-semibold mb-4 text-gray-800">📚 Course Modules</h3>
+            <div id="modules_container" class="space-y-4">
+                <p class="text-gray-600 italic">Loading modules...</p>
+            </div>
+        </div>
+
+        <!-- Recommended Videos -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Recommended Learning Materials</h2>
+            <div id="recommended-videos" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Videos will be inserted here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Knowledge Check -->
+        <div id="knowledge-check" class="bg-white rounded-lg shadow-md p-6 hidden">
+            <h2 class="text-xl font-semibold mb-4">Knowledge Check</h2>
+            <div id="quiz-container">
+                <!-- Questions will be inserted here by JavaScript -->
+            </div>
+            <button id="submit-quiz" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
+                Submit Quiz
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let courseId;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            courseId = urlParams.get('course');
+
+            // Load course data and modules
+            loadCourseData();
+            loadModules();
+        });
+
+        async function loadCourseData() {
+            try {
+                const response = await fetch(`/api/courses/${courseId}/dashboard`);
+                const data = await response.json();
+
+                // Update course title and description
+                document.getElementById('course-title').textContent = data.course.title;
+                document.getElementById('course-description').textContent = data.course.description;
+
+                // Update progress
+                const progressPercent = (data.completed_modules / data.total_modules) * 100;
+                document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+                document.getElementById('progress-text').textContent = `${Math.round(progressPercent)}% Complete (${data.completed_modules}/${data.total_modules} modules)`;
+
+                // Show learning path recommendation if available
+                if (data.recommended_path) {
+                    const pathElement = document.getElementById('path-recommendation');
+                    pathElement.classList.remove('hidden');
+                    document.getElementById('path-description').textContent = `Based on your learning style, we recommend the ${data.recommended_path} path.`;
+                }
+
+                // Display video progress
+                if (data.video_progress && data.video_progress.length > 0) {
+                    const videosContainer = document.getElementById('recommended-videos');
+                    videosContainer.innerHTML = '';
+
+                    // Filter incomplete videos and sort by percent watched
+                    const incompleteVideos = data.video_progress
+                        .filter(video => video.percent_watched < 100)
+                        .sort((a, b) => a.percent_watched - b.percent_watched)
+                        .slice(0, 5); // Take only top 5
+
+                    if (incompleteVideos.length === 0) {
+                        videosContainer.innerHTML = `
+                            <div class="col-span-full p-4 bg-green-50 rounded-lg">
+                                <p class="text-green-700">🎉 Great job! You've completed all learning materials.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    incompleteVideos.forEach(video => {
+                        const videoCard = `
+                            <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <h3 class="text-lg font-semibold mb-2">${video.title}</h3>
+                                        <p class="text-gray-600 mb-4">Module ${video.module_id}</p>
+                                        <div class="flex items-center space-x-4">
+                                            <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                                <div class="bg-blue-600 h-2 rounded-full" style="width: ${video.percent_watched}%"></div>
+                                            </div>
+                                            <span class="text-sm text-gray-600">${Math.round(video.percent_watched)}%</span>
+                                        </div>
+                                        <div class="flex justify-between items-center mt-2">
+                                            <span class="text-xs text-gray-500">${video.watch_date ? new Date(video.watch_date).toLocaleDateString() : 'Not started'}</span>
+                                            <button class="watch-video bg-blue-600 text-white px-3 py-1 rounded text-sm" data-video-id="${video.video_id}">
+                                                ${video.percent_watched > 0 ? 'Continue' : 'Start'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        videosContainer.insertAdjacentHTML('beforeend', videoCard);
+                    });
+
+                    // Add event listeners to watch buttons
+                    document.querySelectorAll('.watch-video').forEach(button => {
+                        button.addEventListener('click', function () {
+                            const videoId = this.getAttribute('data-video-id');
+                            watchVideo(videoId);
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading course data:', error);
+                alert('Failed to load course data');
+            }
+        }
+
+        async function loadModules() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseId = urlParams.get('course');
+
+            if (!courseId) {
+                alert('Course ID not found');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/courses/${courseId}/modules`);
+                const data = await response.json();
+
+                const modulesContainer = document.getElementById('modules_container');
+                modulesContainer.innerHTML = '';
+
+                data.modules.forEach((module, index) => {
+                    const moduleCard = document.createElement('div');
+                    moduleCard.className = `p-6 bg-white rounded-xl shadow-lg mb-4 ${module.status === 'locked' ? 'opacity-75' : ''}`;
+
+                    // Calculate status display
+                    let statusDisplay = '';
+                    let actionButton = '';
+
+                    switch (module.status) {
+                        case 'completed':
+                            statusDisplay = `
+                                <div class="flex items-center text-green-600 mb-2">
+                                    <span class="mr-2">✅</span>
+                                    <span>Completed${module.mastery_score ? ` with ${module.mastery_score}% mastery` : ''}</span>
+                                </div>
+                            `;
+                            actionButton = `
+                                <button onclick="window.location.href='module_page.html?module=${module.module_id}'"
+                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                    Review Module
+                                </button>
+                            `;
+                            break;
+
+                        case 'started':
+                            statusDisplay = `
+                                <div class="flex items-center text-blue-600 mb-2">
+                                    <span class="mr-2">🔄</span>
+                                    <span>In Progress</span>
+                                </div>
+                            `;
+                            actionButton = `
+                                <button onclick="window.location.href='module_page.html?module=${module.module_id}'"
+                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                    Continue Module
+                                </button>
+                            `;
+                            break;
+
+                        case 'locked':
+                            statusDisplay = `
+                                <div class="flex items-center text-red-600 mb-2">
+                                    <span class="mr-2">🔒</span>
+                                    <span>Locked - Complete previous modules first</span>
+                                </div>
+                            `;
+                            actionButton = `
+                                <button disabled
+                                    class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed">
+                                    Module Locked
+                                </button>
+                            `;
+                            break;
+
+                        default: // 'not_started'
+                            if (index === 0 || data.modules[index - 1].status === 'completed') {
+                                statusDisplay = `
+                                    <div class="flex items-center text-yellow-600 mb-2">
+                                        <span class="mr-2">📚</span>
+                                        <span>Ready to Start</span>
+                                    </div>
+                                `;
+                                actionButton = `
+                                    <button onclick="window.location.href='module_page.html?module=${module.module_id}'"
+                                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                                        Start Module
+                                    </button>
+                                `;
+                            } else {
+                                statusDisplay = `
+                                    <div class="flex items-center text-red-600 mb-2">
+                                        <span class="mr-2">🔒</span>
+                                        <span>Complete previous module first</span>
+                                    </div>
+                                `;
+                                actionButton = `
+                                    <button disabled
+                                        class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed">
+                                        Module Locked
+                                    </button>
+                                `;
+                            }
+                            break;
+                    }
+
+                    moduleCard.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">${module.title}</h3>
+                                <p class="text-gray-600">${module.description}</p>
+                            </div>
+                            <span class="px-3 py-1 rounded-full text-sm ${module.difficulty_level === 'introductory' ? 'bg-green-100 text-green-800' :
+                            module.difficulty_level === 'intermediate' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-red-100 text-red-800'
+                        }">
+                                ${module.difficulty_level}
+                            </span>
+                        </div>
+                        ${statusDisplay}
+                        <div class="flex justify-between items-center mt-4">
+                            ${actionButton}
+                            <span class="text-sm text-gray-500">
+                                Module ${module.sequence_order} of ${data.modules.length}
+                            </span>
+                        </div>
+                    `;
+
+                    modulesContainer.appendChild(moduleCard);
+                });
+
+            } catch (error) {
+                console.error('Error loading modules:', error);
+                document.getElementById('modules_container').innerHTML = `
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <p class="text-red-700">Failed to load modules. Please try again.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'completed': return 'bg-green-100 text-green-800';
+                case 'in-progress': return 'bg-yellow-100 text-yellow-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        function getStatusText(status) {
+            switch (status) {
+                case 'completed': return '✅ Completed';
+                case 'in-progress': return '🔄 In Progress';
+                default: return '🆕 Not Started';
+            }
+        }
+
+        function getButtonStyle(status) {
+            switch (status) {
+                case 'completed':
+                    return 'bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition';
+                case 'in-progress':
+                    return 'bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition';
+                default:
+                    return 'bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition';
+            }
+        }
+
+        function getButtonText(status) {
+            switch (status) {
+                case 'completed': return 'Review Module';
+                case 'in-progress': return 'Continue Module';
+                default: return 'Start Module';
+            }
+        }
+
+        async function startModule(moduleId) {
+            try {
+                // Update module status to 'started' if not already started
+                const response = await fetch('/api/modules/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ module_id: moduleId })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to start module');
+                }
+
+                // Navigate to the module page
+                window.location.href = `module_page.html?module=${moduleId}`;
+            } catch (error) {
+                console.error('Error starting module:', error);
+                alert('Error starting module');
+            }
+        }
+
+        function watchVideo(videoId) {
+            // In a real implementation, this would open a video player
+            // For now, we'll just mark it as watched
+            fetch(`/api/videos/${videoId}/watch`, {
+                method: 'POST'
+            });
+
+            alert(`Now playing video ${videoId}`);
+        }
+
+        function loadKnowledgeCheck(courseId, moduleId) {
+            fetch(`/api/courses/${courseId}/modules/${moduleId}/quiz`)
+                .then(response => response.json())
+                .then(data => {
+                    const quizContainer = document.getElementById('quiz-container');
+                    quizContainer.innerHTML = '';
+
+                    data.questions.forEach((question, index) => {
+                        const questionElement = `
+                            <div class="mb-6 p-4 border rounded-lg">
+                                <h3 class="font-medium mb-3">${index + 1}. ${question.question_text}</h3>
+                                ${renderQuestionOptions(question)}
+                            </div>
+                        `;
+                        quizContainer.insertAdjacentHTML('beforeend', questionElement);
+                    });
+
+                    document.getElementById('knowledge-check').classList.remove('hidden');
+
+                    document.getElementById('submit-quiz').addEventListener('click', () => {
+                        submitQuiz(courseId, moduleId, data.questions);
+                    });
+                });
+        }
+
+        function renderQuestionOptions(question) {
+            if (question.question_type === 'multiple_choice') {
+                let optionsHtml = '';
+                const options = JSON.parse(question.options);
+
+                for (const [key, value] of Object.entries(options)) {
+                    optionsHtml += `
+                        <div class="flex items-center mb-2">
+                            <input type="radio" id="q${question.question_id}_${key}" name="q${question.question_id}" value="${key}" class="mr-2">
+                            <label for="q${question.question_id}_${key}">${value}</label>
+                        </div>
+                    `;
+                }
+                return optionsHtml;
+            } else {
+                return `<textarea name="q${question.question_id}" class="w-full p-2 border rounded" rows="3"></textarea>`;
+            }
+        }
+
+        function submitQuiz(courseId, moduleId, questions) {
+            const answers = {};
+
+            questions.forEach(question => {
+                const answerElement = document.querySelector(`[name="q${question.question_id}"]`);
+                if (answerElement) {
+                    if (answerElement.type === 'radio') {
+                        const selected = document.querySelector(`input[name="q${question.question_id}"]:checked`);
+                        answers[question.question_id] = selected ? selected.value : null;
+                    } else {
+                        answers[question.question_id] = answerElement.value;
+                    }
+                }
+            });
+
+            fetch(`/api/courses/${courseId}/modules/${moduleId}/quiz`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ answers })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Quiz submitted! Your score: ${data.score}%`);
+                        window.location.reload();
+                    }
+                });
+        }
+    </script>
+</body>
+
+</html>

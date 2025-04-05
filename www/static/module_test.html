@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+  <div class="flex h-auto">
+    <!-- Sidebar -->
+    <div class="w-64 bg-blue-900 text-white p-6 flex flex-col space-y-6 min-h-screen">
+      <h2 class="text-2xl font-bold">🎓 Learning Path</h2>
+      <nav class="space-y-4">
+        <a href="dashboard.html" class="block px-4 py-3 rounded hover:bg-blue-700">🏠 Dashboard</a>
+        <a href="home" class="block px-4 py-3 rounded hover:bg-blue-700">📚 Courses</a>
+        <a href="#" onclick="history.back()" class="block px-4 py-3 rounded hover:bg-blue-700">⬅️ Back to Module</a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-8 bg-gray-50 min-h-screen">
+      <div class="max-w-4xl mx-auto">
+        <!-- Test Header -->
+        <div class="bg-white p-6 rounded-xl shadow-xl mb-8">
+          <h1 id="module_title" class="text-3xl font-bold text-gray-800 mb-2">Module Test</h1>
+          <div id="test_info" class="text-gray-600"></div>
+        </div>
+
+        <!-- Test Container -->
+        <div id="test-container" class="bg-white p-6 rounded-xl shadow-xl">
+          <div id="test_timer" class="mb-4 text-lg font-semibold text-blue-600"></div>
+          <div id="test_questions" class="space-y-6">
+            <p class="text-gray-600 italic">Loading test questions...</p>
+          </div>
+          <button id="submit_test"
+            class="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition shadow-md">
+            Submit Test
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentModuleId = null;
+    let startTime;
+    let testTimer;
+
+    function startTimer() {
+      startTime = new Date();
+      testTimer = setInterval(updateTimer, 1000);
+    }
+
+    function updateTimer() {
+      const now = new Date();
+      const timeSpent = Math.floor((now - startTime) / 1000);
+      const minutes = Math.floor(timeSpent / 60);
+      const seconds = timeSpent % 60;
+      document.getElementById('test_timer').textContent =
+        `⏱️ Time Spent: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function stopTimer() {
+      clearInterval(testTimer);
+      return Math.floor((new Date() - startTime) / 1000);
+    }
+
+    async function loadTest() {
+      const urlParams = new URLSearchParams(window.location.search);
+      currentModuleId = urlParams.get('module');
+
+      if (!currentModuleId) {
+        alert('Module ID not found');
+        return;
+      }
+
+      try {
+        // Get module info
+        const moduleResponse = await fetch(`/api/modules/${currentModuleId}`);
+        const moduleData = await moduleResponse.json();
+        document.getElementById('module_title').textContent = `Module Test: ${moduleData.title}`;
+
+        // Check if user can take test
+        const progressResponse = await fetch(`/api/modules/${currentModuleId}/progress`);
+        const progress = await progressResponse.json();
+
+        if (!progress.can_take_test) {
+          document.getElementById('test-container').innerHTML = `
+                        <div class="p-4 bg-yellow-50 rounded-lg">
+                            <h3 class="text-xl font-semibold text-yellow-800 mb-2">⚠️ Test Not Available</h3>
+                            <p class="text-yellow-700">You need to complete at least 70% of the module videos before taking the test.</p>
+                            <button onclick="window.location.href='module_page.html?module=${currentModuleId}'" 
+                                class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                Return to Module
+                            </button>
+                        </div>
+                    `;
+          return;
+        }
+
+        // Generate test
+        const response = await fetch('/generate_module_test', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ module_id: currentModuleId })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          document.getElementById('test_questions').innerHTML = `
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <p class="text-red-700">${data.message || data.error}</p>
+                        </div>
+                    `;
+          return;
+        }
+
+        const questionsDiv = document.getElementById('test_questions');
+        questionsDiv.innerHTML = '';
+
+        data.questions.forEach((question, index) => {
+          const questionDiv = document.createElement('div');
+          questionDiv.className = 'p-4 bg-gray-50 rounded-lg';
+          questionDiv.setAttribute('data-question-id', question.id);
+          questionDiv.innerHTML = `
+                        <h4 class="font-semibold text-lg mb-3">Question ${index + 1}: ${question.question}</h4>
+                        <div class="space-y-2">
+                            ${question.options.map((option, i) => `
+                                <label class="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded cursor-pointer">
+                                    <input type="radio" name="q${question.id}" value="${option}" class="form-radio text-blue-600">
+                                    <span>${option}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    `;
+          questionsDiv.appendChild(questionDiv);
+        });
+
+        startTimer();
+      } catch (error) {
+        console.error('Error loading test:', error);
+        document.getElementById('test_questions').innerHTML = `
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <p class="text-red-700">Failed to load test. Please try again.</p>
+                    </div>
+                `;
+      }
+    }
+
+    document.getElementById('submit_test').addEventListener('click', async () => {
+      const questions = document.querySelectorAll('#test_questions > div');
+      let answers = {};
+      let allAnswered = true;
+
+      questions.forEach((questionDiv, index) => {
+        const questionId = questionDiv.getAttribute('data-question-id');
+        const selectedAnswer = questionDiv.querySelector('input:checked');
+        if (!selectedAnswer) {
+          allAnswered = false;
+          questionDiv.classList.add('border-2', 'border-red-500');
+          return;
+        }
+        answers[questionId] = selectedAnswer.value;
+      });
+
+      if (!allAnswered) {
+        alert('Please answer all questions before submitting.');
+        return;
+      }
+
+      const timeSpentSeconds = stopTimer();
+
+      try {
+        const response = await fetch(`/api/modules/${currentModuleId}/submit-test`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            answers: answers,
+            total_questions: questions.length,
+            time_spent_seconds: timeSpentSeconds
+          })
+        });
+
+        const data = await response.json();
+        showTestResults(data);
+      } catch (error) {
+        console.error('Error submitting test:', error);
+        alert('Failed to submit test. Please try again.');
+      }
+    });
+
+    async function showTestResults(data) {
+      const resultsDiv = document.createElement('div');
+      resultsDiv.className = 'mt-8 p-6 rounded-lg ' + (data.passed ? 'bg-green-50' : 'bg-red-50');
+
+      let content = `
+        <h3 class="text-2xl font-bold mb-4 ${data.passed ? 'text-green-700' : 'text-red-700'}">
+            ${data.passed ? '🎉 Congratulations!' : '📚 Keep Learning!'}
+        </h3>
+        <div class="mb-4">
+            <p class="text-lg">Your Score: <span class="font-bold">${Math.round(data.score)}%</span></p>
+            <p>Correct Answers: ${data.correct_answers} out of ${data.total_questions}</p>
+            <p>Attempt: ${data.attempt_number} of 3</p>
+        </div>
+    `;
+
+      if (!data.passed) {
+        content += `
+            <div class="bg-white p-4 rounded-lg mb-4">
+                <h4 class="font-semibold text-red-600 mb-2">Areas to Review:</h4>
+                <ul class="list-disc list-inside mb-4">
+                    ${data.topics_to_review.map(topic => `<li>${topic}</li>`).join('')}
+                </ul>
+                
+                ${data.remedial_content.length > 0 ? `
+                    <h4 class="font-semibold text-gray-700 mb-2">Recommended Review Materials:</h4>
+                    <div class="space-y-2">
+                        ${data.remedial_content.map(content => `
+                            <div class="p-3 bg-blue-50 rounded">
+                                <h5 class="font-medium">${content.title}</h5>
+                                <p class="text-sm text-gray-600">${content.description}</p>
+                                <button onclick="watchVideo(${content.video_id})" 
+                                    class="mt-2 bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                                    Watch Video
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+                
+                ${data.can_retry ? `
+                    <div class="mt-6 p-4 bg-yellow-50 rounded-lg">
+                        <p class="text-yellow-800">
+                            You need ${data.min_score_needed}% to pass this module.
+                            ${data.waiting_period > 0
+              ? `Please wait ${data.waiting_period} hours before your next attempt.`
+              : 'You can retry the test when you feel ready.'}
+                        </p>
+                        ${data.waiting_period === 0 ? `
+                            <button onclick="retakeTest()" 
+                                class="mt-4 bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700">
+                                Retake Test
+                            </button>
+                        ` : ''}
+                    </div>
+                ` : `
+                    <div class="mt-6 p-4 bg-red-100 rounded-lg">
+                        <p class="text-red-800">
+                            You have reached the maximum number of attempts for this test. 
+                            We recommend reviewing the basic concepts before proceeding.
+                        </p>
+                        <button onclick="window.location.href='module_page.html?module=${currentModuleId}'" 
+                            class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                            Review Module Content
+                        </button>
+                    </div>
+                `}
+            </div>
+        `;
+      } else {
+        content += `
+            <div class="mt-6">
+                <p class="text-green-700 mb-4">You've successfully completed this module!</p>
+                ${data.next_module ? `
+                    <div class="p-4 bg-blue-50 rounded-lg mb-4">
+                        <h4 class="font-semibold text-blue-800 mb-2">Next Module:</h4>
+                        <p class="text-blue-700">${data.next_module.title}</p>
+                        <p class="text-sm text-blue-600">Difficulty: ${data.next_module.difficulty_level}</p>
+                        <button onclick="window.location.href='module_page.html?module=${data.next_module.module_id}'" 
+                            class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                            Start Next Module
+                        </button>
+                    </div>
+                ` : `
+                    <div class="p-4 bg-green-100 rounded-lg">
+                        <p class="text-green-800">🎓 Congratulations! You've completed all modules in this course!</p>
+                        <button onclick="window.location.href='dashboard.html'" 
+                            class="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                            Return to Dashboard
+                        </button>
+                    </div>
+                `}
+            </div>
+        `;
+      }
+
+      resultsDiv.innerHTML = content;
+      document.getElementById('test-container').innerHTML = '';
+      document.getElementById('test-container').appendChild(resultsDiv);
+    }
+
+    async function retakeTest() {
+      try {
+        const response = await fetch(`/api/modules/${currentModuleId}/test/retry`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to initialize test retry');
+        }
+
+        // Reload the page to start fresh test
+        window.location.reload();
+      } catch (error) {
+        console.error('Error retaking test:', error);
+        alert('Failed to initialize test retry. Please try again.');
+      }
+    }
+
+    async function watchVideo(videoId) {
+      try {
+        // Store the current test state
+        const testState = {
+          moduleId: currentModuleId,
+          remainingTime: timer ? timer.getTimeLeft() : null
+        };
+        localStorage.setItem('testState', JSON.stringify(testState));
+
+        // Navigate to video page
+        window.location.href = `video_page.html?video_id=${videoId}&module_id=${currentModuleId}&return_to_test=true`;
+      } catch (error) {
+        console.error('Error navigating to video:', error);
+        alert('Failed to open video. Please try again.');
+      }
+    }
+
+    // Add function to restore test state when returning from video
+    window.addEventListener('load', function () {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('returning_from_video') === 'true') {
+        const testState = localStorage.getItem('testState');
+        if (testState) {
+          const state = JSON.parse(testState);
+          if (state.moduleId === currentModuleId) {
+            // Restore timer if it was running
+            if (state.remainingTime) {
+              timer.setTimeLeft(state.remainingTime);
+            }
+          }
+          localStorage.removeItem('testState');
+        }
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', loadTest);
+  </script>
+</body>
+
+</html>

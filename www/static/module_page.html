@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module Content</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+  <div class="flex h-auto">
+    <!-- Sidebar -->
+    <div class="w-64 bg-blue-900 text-white p-6 flex flex-col space-y-6 min-h-screen">
+      <h2 class="text-2xl font-bold">🎓 Learning Path</h2>
+      <nav class="space-y-4">
+        <a href="dashboard.html" class="block px-4 py-3 rounded hover:bg-blue-700">🏠 Dashboard</a>
+        <a href="home" class="block px-4 py-3 rounded hover:bg-blue-700">📚 Courses</a>
+        <a href="pre_assessment.html" class="block px-4 py-3 rounded hover:bg-blue-700">📝 Assessments</a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-8 bg-gray-50 min-h-screen">
+      <div class="max-w-4xl mx-auto">
+        <!-- Module Header -->
+        <div class="bg-white p-6 rounded-xl shadow-xl mb-8">
+          <h1 id="module_title" class="text-3xl font-bold text-gray-800 mb-2">Loading...</h1>
+          <p id="module_description" class="text-gray-600">Loading description...</p>
+          <div class="mt-4">
+            <span id="module_difficulty"
+              class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Loading...</span>
+          </div>
+        </div>
+
+        <!-- Videos Section -->
+        <div class="bg-white p-6 rounded-xl shadow-xl mb-8">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">🎥 Videos</h2>
+          <div id="videos_container" class="space-y-4">
+            Loading videos...
+          </div>
+        </div>
+
+        <!-- Test Section -->
+        <div id="module_test_section" class="bg-white p-6 rounded-xl shadow-xl">
+          <h3 class="text-2xl font-semibold mb-4 text-gray-800">📝 Module Test</h3>
+          <div id="test_timer" class="mb-4 text-lg font-semibold text-blue-600"></div>
+          <div id="test_questions" class="space-y-6">
+            <p class="text-gray-600 italic">Loading test questions...</p>
+          </div>
+          <button id="submit_test"
+            class="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition shadow-md">
+            Submit Test
+          </button>
+        </div>
+
+        <!-- Test Results Section -->
+        <div id="test_results" class="bg-white p-6 rounded-xl shadow-xl hidden">
+          <h3 class="text-2xl font-semibold mb-4 text-gray-800">📊 Test Results</h3>
+          <div id="results_content" class="space-y-4">
+            <!-- Results will be displayed here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentModuleId = null;
+    let testAnswers = {};
+    let startTime;
+    let testTimer;
+
+    function createVideoElement(video) {
+      const videoCard = document.createElement('div');
+      videoCard.className = 'bg-white rounded-lg shadow-md p-4 mb-4';
+
+      // Ensure we have the current module ID
+      const moduleId = currentModuleId || new URLSearchParams(window.location.search).get('module');
+
+      videoCard.innerHTML = `
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold mb-2">${video.title}</h3>
+            <p class="text-gray-600 mb-4">${video.description}</p>
+            <div class="flex items-center space-x-4">
+              <div class="flex-1 bg-gray-200 rounded-full h-2">
+                <div class="bg-blue-600 h-2 rounded-full" style="width: ${video.percent_watched || 0}%"></div>
+              </div>
+              <span class="text-sm text-gray-600">${Math.round(video.percent_watched || 0)}%</span>
+            </div>
+          </div>
+          <button onclick="startVideo(${video.video_id})"
+            class="ml-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            ${video.percent_watched >= 100 ? 'Review' : video.percent_watched > 0 ? 'Continue' : 'Start'}
+          </button>
+        </div>
+      `;
+      return videoCard;
+    }
+
+    function startVideo(videoId) {
+      const moduleId = currentModuleId || new URLSearchParams(window.location.search).get('module');
+      if (!moduleId) {
+        console.error('No module ID available');
+        return;
+      }
+      window.location.href = `video_page.html?video_id=${videoId}&module_id=${moduleId}`;
+    }
+
+    async function loadModule() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const moduleId = urlParams.get('module');
+
+      if (!moduleId) {
+        console.error('No module ID provided');
+        alert('Error: No module ID provided');
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      try {
+        // Store the module ID globally
+        currentModuleId = moduleId;
+
+        // Fetch module data
+        const response = await fetch(`/api/modules/${moduleId}`);
+        if (!response.ok) throw new Error('Failed to fetch module data');
+        const data = await response.json();
+
+        // Update module title and description
+        const titleElement = document.getElementById('module_title');
+        const descriptionElement = document.getElementById('module_description');
+        if (titleElement) titleElement.textContent = data.module.title;
+        if (descriptionElement) descriptionElement.textContent = data.module.description;
+
+        // Fetch module progress including video progress
+        const progressResponse = await fetch(`/api/modules/${moduleId}/progress`);
+        if (!progressResponse.ok) throw new Error('Failed to fetch module progress');
+        const progressData = await progressResponse.json();
+
+        // Update module progress
+        if (progressData.total_progress !== undefined) {
+          const progressBar = document.getElementById('module_progress_bar');
+          const progressText = document.getElementById('module_progress');
+          if (progressBar && progressText) {
+            progressBar.style.width = `${progressData.total_progress}%`;
+            progressText.textContent = `${Math.round(progressData.total_progress)}% Complete`;
+          }
+        }
+
+        // Load videos with progress
+        const videosContainer = document.getElementById('videos_container');
+        if (!videosContainer) {
+          console.error('Videos container not found');
+          return;
+        }
+
+        videosContainer.innerHTML = '';
+
+        if (!progressData.videos || progressData.videos.length === 0) {
+          videosContainer.innerHTML = '<p class="text-gray-600 italic">No videos available for this module.</p>';
+          return;
+        }
+
+        // Sort videos by sequence_order
+        progressData.videos.sort((a, b) => a.sequence_order - b.sequence_order);
+
+        progressData.videos.forEach(video => {
+          videosContainer.appendChild(createVideoElement(video));
+        });
+
+        // Check if test is available and generate test questions
+        if (progressData.can_take_test) {
+          generateModuleTest();
+        } else {
+          document.getElementById('test_questions').innerHTML = `
+            <div class="p-4 bg-yellow-50 rounded-lg">
+              <p class="text-yellow-700">You need to complete at least 70% of the module videos before taking the test.</p>
+            </div>
+          `;
+        }
+
+      } catch (error) {
+        console.error('Error loading module:', error);
+        const moduleContent = document.getElementById('videos_container');
+        if (moduleContent) {
+          moduleContent.innerHTML = `
+            <div class="p-4 bg-red-50 rounded-lg">
+              <p class="text-red-700">Failed to load module content. Please try again later.</p>
+            </div>
+          `;
+        }
+      }
+    }
+
+    function startTimer() {
+      startTime = new Date();
+      testTimer = setInterval(updateTimer, 1000);
+    }
+
+    function updateTimer() {
+      const now = new Date();
+      const timeSpent = Math.floor((now - startTime) / 1000);
+      const minutes = Math.floor(timeSpent / 60);
+      const seconds = timeSpent % 60;
+      document.getElementById('test_timer').textContent =
+        `Time Spent: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function stopTimer() {
+      clearInterval(testTimer);
+      const timeSpent = Math.floor((new Date() - startTime) / 1000);
+      return timeSpent;
+    }
+
+    async function generateModuleTest() {
+      try {
+        const response = await fetch('/generate_module_test', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            module_id: currentModuleId
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          document.getElementById('test_questions').innerHTML = `
+            <div class="p-4 bg-yellow-50 rounded-lg">
+              <p class="text-yellow-700">${data.message || data.error}</p>
+              <p class="text-sm mt-2">Please contact your instructor to add questions for this module.</p>
+            </div>
+          `;
+          return;
+        }
+
+        const questionsDiv = document.getElementById('test_questions');
+        if (!questionsDiv) {
+          console.error('Test questions container not found');
+          return;
+        }
+
+        questionsDiv.innerHTML = '';
+
+        if (!data.questions || data.questions.length === 0) {
+          questionsDiv.innerHTML = `
+            <div class="p-4 bg-yellow-50 rounded-lg">
+              <p class="text-yellow-700">No questions available for this module.</p>
+              <p class="text-sm mt-2">Please contact your instructor to add questions.</p>
+            </div>
+          `;
+          return;
+        }
+
+        data.questions.forEach((question, index) => {
+          const questionDiv = document.createElement('div');
+          questionDiv.className = 'p-4 bg-gray-50 rounded-lg mb-4';
+          questionDiv.setAttribute('data-question-id', question.id);
+
+          // Create question text
+          const questionText = document.createElement('h4');
+          questionText.className = 'font-semibold text-lg mb-3';
+          questionText.textContent = `Question ${index + 1}: ${question.question}`;
+          questionDiv.appendChild(questionText);
+
+          // Create options container
+          const optionsContainer = document.createElement('div');
+          optionsContainer.className = 'space-y-2';
+
+          // Add each option
+          question.options.forEach((option, i) => {
+            const optionLabel = document.createElement('label');
+            optionLabel.className = 'flex items-center space-x-2 p-2 hover:bg-gray-100 rounded cursor-pointer';
+
+            const radioInput = document.createElement('input');
+            radioInput.type = 'radio';
+            radioInput.name = `q${question.id}`;
+            radioInput.value = option;
+            radioInput.className = 'form-radio text-blue-600';
+
+            const optionText = document.createElement('span');
+            optionText.textContent = option;
+
+            optionLabel.appendChild(radioInput);
+            optionLabel.appendChild(optionText);
+            optionsContainer.appendChild(optionLabel);
+          });
+
+          questionDiv.appendChild(optionsContainer);
+          questionsDiv.appendChild(questionDiv);
+        });
+
+        // Start the timer when questions are loaded
+        startTimer();
+      } catch (error) {
+        console.error('Error generating test:', error);
+        const questionsDiv = document.getElementById('test_questions');
+        if (questionsDiv) {
+          questionsDiv.innerHTML = `
+            <div class="p-4 bg-red-50 rounded-lg">
+              <p class="text-red-700">Failed to load test questions. Please try again later.</p>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Handle test submission
+    async function submitTest() {
+      try {
+        const timeSpent = stopTimer();
+        const answers = {};
+        let totalQuestions = 0;
+
+        // Collect all answers
+        document.querySelectorAll('[data-question-id]').forEach(questionDiv => {
+          const questionId = questionDiv.getAttribute('data-question-id');
+          const selectedOption = questionDiv.querySelector('input[type="radio"]:checked');
+          if (selectedOption) {
+            answers[questionId] = selectedOption.value;
+          }
+          totalQuestions++;
+        });
+
+        const response = await fetch(`/api/modules/${currentModuleId}/submit-test`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            answers: answers,
+            total_questions: totalQuestions,
+            time_spent_seconds: timeSpent
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.error) {
+          throw new Error(result.error);
+        }
+
+        // Hide test section and show results
+        document.getElementById('module_test_section').classList.add('hidden');
+        const resultsDiv = document.getElementById('test_results');
+        resultsDiv.classList.remove('hidden');
+
+        // Display results
+        const resultsContent = document.getElementById('results_content');
+        resultsContent.innerHTML = `
+          <div class="p-4 ${result.passed ? 'bg-green-50' : 'bg-red-50'} rounded-lg">
+            <h4 class="text-lg font-semibold ${result.passed ? 'text-green-700' : 'text-red-700'}">
+              ${result.passed ? '🎉 Congratulations! You passed!' : '😔 You need to try again'}
+            </h4>
+            <p class="mt-2">Score: ${result.score.toFixed(1)}%</p>
+            <p class="mt-2">Correct Answers: ${result.correct_answers} out of ${result.total_questions}</p>
+            ${result.next_module_unlocked ? `
+              <div class="mt-4">
+                <p class="text-green-700">Next module has been unlocked!</p>
+                <button onclick="window.location.href='module_page.html?module=${result.next_module_id}'"
+                  class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                  Continue to Next Module
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+
+      } catch (error) {
+        console.error('Error submitting test:', error);
+        alert('Failed to submit test. Please try again later.');
+      }
+    }
+
+    // Add event listener for test submission
+    document.getElementById('submit_test').addEventListener('click', submitTest);
+
+    // Load module when page loads
+    document.addEventListener('DOMContentLoaded', loadModule);
+  </script>
+</body>
+
+</html>

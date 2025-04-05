@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Learning</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://www.youtube.com/iframe_api"></script>
+</head>
+
+<body class="bg-gray-50">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Back to Module Button -->
+    <button id="module_return" class="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+      ← Back to Module
+    </button>
+
+    <!-- Video Player Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <h2 id="video_title" class="text-2xl font-semibold mb-4">Loading video...</h2>
+      <div class="relative w-full" style="height: 70vh;">
+        <div id="youtube-player" class="w-full h-full"></div>
+      </div>
+      <div class="flex justify-between items-center mt-4">
+        <div class="flex-1 mr-4">
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div id="progress_bar" class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+          </div>
+          <p id="video_description" class="text-gray-600 mt-2">Loading video details...</p>
+        </div>
+        <div class="flex space-x-2">
+          <button id="next_video" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Next Video
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <h3 class="text-xl font-semibold mb-4">Notes</h3>
+      <textarea id="video_notes" class="w-full p-4 border rounded-lg" rows="4"
+        placeholder="Take notes while watching..."></textarea>
+      <button id="save_notes" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        Save Notes
+      </button>
+    </div>
+
+    <!-- Rating Section -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h3 class="text-xl font-semibold mb-4">Rate this video</h3>
+      <div class="flex space-x-2" id="rating-stars">
+        <button class="rating-star text-2xl" data-rating="1">☆</button>
+        <button class="rating-star text-2xl" data-rating="2">☆</button>
+        <button class="rating-star text-2xl" data-rating="3">☆</button>
+        <button class="rating-star text-2xl" data-rating="4">☆</button>
+        <button class="rating-star text-2xl" data-rating="5">☆</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let videoId;
+    let moduleId;
+    let currentVideoProgress = 0;
+    let player;
+
+    // Get video and module IDs from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    videoId = urlParams.get('video_id');
+    moduleId = urlParams.get('module_id');
+
+    // YouTube API callback
+    function onYouTubeIframeAPIReady() {
+      loadVideo();
+    }
+
+    async function loadVideo() {
+      if (!videoId || !moduleId) {
+        console.error('Missing video_id or module_id');
+        alert('Error: Missing video or module information');
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/videos/${videoId}`);
+        if (!response.ok) throw new Error('Failed to fetch video data');
+        const video = await response.json();
+
+        document.getElementById('video_title').textContent = video.title;
+        document.getElementById('video_description').textContent = video.description;
+
+        // Extract YouTube video ID from URL
+        const youtubeUrl = video.url;
+        const youtubeId = extractYouTubeId(youtubeUrl);
+
+        if (!youtubeId) {
+          throw new Error('Invalid YouTube URL');
+        }
+
+        // Create YouTube player
+        player = new YT.Player('youtube-player', {
+          height: '100%',
+          width: '100%',
+          videoId: youtubeId,
+          playerVars: {
+            'autoplay': 0,
+            'controls': 1,
+            'rel': 0,
+            'showinfo': 0
+          },
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+
+        // Set up navigation
+        setupNavigation();
+
+        // Load saved progress and notes
+        await loadVideoProgress();
+      } catch (error) {
+        console.error('Error loading video:', error);
+        alert('Failed to load video. Returning to module page...');
+        window.location.href = `module_page.html?module=${moduleId}`;
+      }
+    }
+
+    function extractYouTubeId(url) {
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    function onPlayerReady(event) {
+      // Player is ready
+      if (currentVideoProgress > 0) {
+        const duration = player.getDuration();
+        const seekTo = (duration * currentVideoProgress) / 100;
+        player.seekTo(seekTo);
+      }
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.ENDED) {
+        onVideoEnd();
+      } else if (event.data === YT.PlayerState.PLAYING) {
+        // Start progress tracking
+        startProgressTracking();
+      } else if (event.data === YT.PlayerState.PAUSED) {
+        // Update progress when paused
+        const currentTime = player.getCurrentTime();
+        const duration = player.getDuration();
+        const progress = (currentTime / duration) * 100;
+        updateProgress(progress);
+      }
+    }
+
+    let progressInterval;
+    function startProgressTracking() {
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
+      progressInterval = setInterval(() => {
+        const currentTime = player.getCurrentTime();
+        const duration = player.getDuration();
+        const progress = (currentTime / duration) * 100;
+        updateProgress(progress);
+      }, 1000); // Update every second instead of 5 seconds
+    }
+
+    async function setupNavigation() {
+      try {
+        // Set up back button
+        document.getElementById('module_return').onclick = () => {
+          window.location.href = `module_page.html?module=${moduleId}`;
+        };
+
+        // Set up next video button
+        const response = await fetch(`/api/modules/${moduleId}/next-video?current_video=${videoId}`);
+        if (!response.ok) throw new Error('Failed to fetch next video data');
+        const data = await response.json();
+
+        const nextButton = document.getElementById('next_video');
+        if (data.next_video) {
+          nextButton.onclick = () => {
+            window.location.href = `video_page.html?video_id=${data.next_video.video_id}&module_id=${moduleId}`;
+          };
+          nextButton.disabled = false;
+        } else {
+          nextButton.textContent = 'No More Videos';
+          nextButton.disabled = true;
+          nextButton.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+      } catch (error) {
+        console.error('Error setting up navigation:', error);
+      }
+    }
+
+    async function onVideoEnd() {
+      try {
+        // Update progress to 100%
+        await updateProgress(100);
+
+        const response = await fetch(`/api/modules/${moduleId}/next-video?current_video=${videoId}`);
+        if (!response.ok) throw new Error('Failed to fetch next video data');
+        const data = await response.json();
+
+        if (data.next_video) {
+          if (confirm('Would you like to watch the next video?')) {
+            window.location.href = `video_page.html?video_id=${data.next_video.video_id}&module_id=${moduleId}`;
+          } else {
+            window.location.href = `module_page.html?module=${moduleId}`;
+          }
+        } else {
+          alert('You have completed all videos in this module!');
+          window.location.href = `module_page.html?module=${moduleId}`;
+        }
+      } catch (error) {
+        console.error('Error handling video end:', error);
+        window.location.href = `module_page.html?module=${moduleId}`;
+      }
+    }
+
+    async function updateProgress(progress) {
+      try {
+        const response = await fetch(`/api/videos/${videoId}/progress`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            percent_watched: progress,
+            module_id: moduleId,
+            notes: document.getElementById('video_notes').value
+          })
+        });
+
+        if (!response.ok) throw new Error('Failed to update progress');
+        document.getElementById('progress_bar').style.width = `${progress}%`;
+        currentVideoProgress = progress; // Update the current progress
+      } catch (error) {
+        console.error('Error updating progress:', error);
+      }
+    }
+
+    async function loadVideoProgress() {
+      try {
+        const response = await fetch(`/api/videos/${videoId}/progress`, { credentials: "include" });
+        const data = await response.json();
+
+        if (data.percent_watched) {
+          currentVideoProgress = data.percent_watched;
+          document.getElementById('progress_bar').style.width = `${currentVideoProgress}%`;
+          if (data.notes) {
+            document.getElementById('video_notes').value = data.notes;
+          }
+        }
+
+        // Load video rating if exists
+        if (data.rating) {
+          updateRatingDisplay(data.rating);
+        }
+      } catch (error) {
+        console.error('Error loading video progress:', error);
+      }
+    }
+
+    function updateRatingDisplay(rating) {
+      document.querySelectorAll('.rating-star').forEach((star, index) => {
+        star.textContent = index < rating ? '★' : '☆';
+      });
+    }
+
+    // Event Listeners
+    document.getElementById('save_notes').addEventListener('click', () => {
+      updateProgress(currentVideoProgress);
+    });
+
+    document.querySelectorAll('.rating-star').forEach(star => {
+      star.addEventListener('click', async () => {
+        const rating = star.getAttribute('data-rating');
+        try {
+          const response = await fetch(`/api/videos/${videoId}/rate`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ rating: parseInt(rating) })
+          });
+          if (response.ok) {
+            updateRatingDisplay(rating);
+          }
+        } catch (error) {
+          console.error('Error rating video:', error);
+        }
+      });
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', loadVideo);
+
+    // Save progress before leaving
+    window.addEventListener('beforeunload', () => {
+      const videoPlayer = document.getElementById('video_player');
+      if (videoPlayer) {
+        const progress = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+        updateProgress(progress);
+      }
+    });
+  </script>
+</body>
+
+</html>

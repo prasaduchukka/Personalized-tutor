@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform</title>
+
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="assets/textillate/animate.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <!-- External Scripts -->
+    <script defer src="script.js"></script>
+
+    <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
+</head>
+
+<body>
+    <section class="web-learning">
+        <!-- Header Section -->
+        <header class="header">
+            <h1>Personalized Learning Platform</h1>
+            <nav>
+                <ul class="menu">
+                    <li class="dropdown">
+                        <a href="#">Services ▼</a>
+                        <ul class="dropdown-content">
+                            <li><a href="#">K12 Online Accreditation</a></li>
+                            <li><a href="#">Parent & Student Resources</a></li>
+                            <li><a href="#">Types of Learners We Serve</a></li>
+                            <li><a href="#">Meet the Teachers</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Resources ▼</a>
+                        <ul class="dropdown-content">
+                            <li><a href="#">Elementary School (Grades K-5)</a></li>
+                            <li><a href="#">Middle School (Grades 6-8)</a></li>
+                            <li><a href="#">High School (Grades 9-12)</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li class="bot"><i class="fa-solid fa-robot"></i></li>
+                    <li><a href="#">Doubt Assistance</a></li>
+                    <li>Welcome, <span id="username" style="font-weight: bold"></span>!!</li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Introduction Section -->
+        <section class="container">
+            <h2>Welcome to Our Personalized Learning Platform!</h2>
+            <p>Select a course to begin your learning journey with AI-powered recommendations.</p>
+        </section>
+
+        <section class="shopping"></section>
+    </section>
+    <!-- AI Assistant Section -->
+    <section class="SiriWave" hidden>
+        <h2 class="Siritext">Hello, How Can I help You!</h2>
+        <div id="siri-container"></div>
+        <div class="place">
+            <div class="input borderN">
+                <input id="chat-input" placeholder="Ask Anything" class="search">
+                <button id="send"><i class="fa-solid fa-paper-plane"></i></button>
+                <button id="mic"><i class="fa-solid fa-microphone border"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Scripts -->
+    <script src="assets/textillate/jquery.fittext.js"></script>
+    <script src="assets/textillate/jquery.lettering.js"></script>
+    <script src="assets/textillate/jquery.textillate.js"></script>
+    <script src="main.js"></script>
+    <script src="controller.js"></script>
+    <script src="/eel.js"></script>
+
+    <script>
+        // Fetch current user session
+        fetch("http://127.0.0.1:5000/current_user", {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.user_id) {
+                    document.getElementById("username").innerText = data.username;
+                } else {
+                    alert("No active session. Redirecting to login.");
+                    window.location.href = "index.html";
+                }
+            })
+            .catch(error => console.error("Error fetching current user:", error));
+
+        function logout() {
+            fetch("http://127.0.0.1:5000/logout", { method: "POST" })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    localStorage.removeItem("user");
+                    window.location.href = "index.html";
+                })
+                .catch(error => console.error("Error:", error));
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchCourses();
+        });
+
+        function fetchCourses() {
+            fetch("http://127.0.0.1:5000/get_courses", {
+                method: "GET",
+                credentials: "include"
+            })
+                .then(response => response.json())
+                .then(courses => {
+                    const courseContainer = document.querySelector(".shopping");
+                    courseContainer.innerHTML = ""; // Clear existing content
+
+                    const codingImages = [
+                        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97",  // ✅ Coding setup
+                        "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb",  // ✅ Developer working
+                        "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2",  // ✅ Dark coding screen
+                        "https://images.unsplash.com/photo-1533090161767-e6ffed986c88",  // ✅ Multiple monitors coding
+                        "https://images.unsplash.com/photo-1516979187457-637abb4f9353",  // ✅ Laptop coding
+                        "https://images.unsplash.com/photo-1498050108023-c5249f4df085",  // ✅ Code on screen
+                        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97",  // ✅ Coding setup
+                        "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2",  // ✅ Code on black screen
+                        "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb",  // ✅ Developer working
+                    ];
+
+
+                    courses.forEach((course, index) => {
+                        const imageIndex = index % codingImages.length; // Cycle through images
+                        const randomImage = codingImages[imageIndex];
+
+                        const courseBox = document.createElement("div");
+                        courseBox.className = "course-box";
+
+                        // Add class "enrolled-btn" if the user is already enrolled
+                        const buttonClass = course.enrolled ? "enrolled-btn" : "enroll-btn";
+                        const buttonText = course.enrolled ? "Enrolled" : "Enroll Now";
+
+                        courseBox.innerHTML = `
+                <h2>${course.title}</h2>
+                <img src="${randomImage}?w=400&h=250&fit=crop" alt="Course Image" class="course-img">
+                <p>${course.description}</p>
+                <p><strong>Difficulty:</strong> ${course.difficulty_level}</p>
+                <p><strong>Modules:</strong> ${course.total_modules}</p>
+                <p><strong>Duration:</strong> ${course.estimated_duration_hours} hours</p>
+               <button class="${buttonClass}" onclick="enrollCourse(${course.course_id}, this)">
+                    ${buttonText}
+                </button>
+            `;
+
+
+                        courseContainer.appendChild(courseBox);
+                    });
+                })
+                .catch(error => console.error("Error fetching courses:", error));
+        }
+
+        function enrollCourse(courseId, button) {
+            fetch("http://127.0.0.1:5000/enroll", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ course_id: courseId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.message === "Enrolled successfully") {
+                        button.innerText = "Enrolled";
+                        button.disabled = true;
+                    }
+                })
+                .catch(error => console.error("Error enrolling:", error));
+        }
+    </script>
+</body>
+
+</html>

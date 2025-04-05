@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="dashboard.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Dashboard Container -->
+    <div class="flex h-auto">
+        
+       <!-- Sidebar -->
+<div class="w-64 bg-blue-900 text-white p-6 flex flex-col space-y-6 min-h-screen">
+    <h2 class="text-2xl font-bold">🎓 Student Dashboard</h2>
+    <nav class="space-y-4">
+        <a href="#" class="block px-4 py-3 rounded bg-blue-700">🏠 Dashboard</a>
+        <a href="home" class="block px-4 py-3 rounded hover:bg-blue-700">📚 Courses</a>
+         <a href="pre_assessment.html" class="block px-4 py-3 rounded hover:bg-blue-700">📝 Assessments</a>
+    </nav>
+</div>
+
+<!-- Main Content -->
+<div class="flex-1 p-8 bg-gray-50 min-h-screen flex flex-col space-y-8">
+    
+    <!-- Welcome Section -->
+        <h2><span id="student_name" class="text-blue-600"></span></h2>
+
+    
+    <!-- Dashboard Layout -->
+    <div class="flex flex-col space-y-8">
+        
+        <!-- Enrolled Courses -->
+        <div class="bg-gradient-to-r from-blue-400 to-blue-600 p-6 rounded-xl shadow-xl text-white flex flex-col">
+            <h3 class="text-2xl font-semibold mb-4">🎓 Enrolled Courses</h3>
+            <div id="enrolled_courses" class="space-y-4 mt-4  p-4 rounded-lg text-gray-700 bg-white">
+                <p class="text-gray-600 italic">Loading enrolled courses...</p>
+            </div>
+        </div>
+
+        <!-- Pre-Assessment Score -->
+        <div class="bg-white p-6 rounded-xl shadow-xl flex flex-col items-start border-l-8 border-yellow-500">
+            <h3 class="text-2xl font-semibold mb-4 text-gray-800">📝 Pre-Assessment Score</h3>
+            <p id="pre_assessment_score" class="text-3xl text-green-600 font-bold">Fetching...</p>
+            <button id="retake_assessment_btn" 
+                class="mt-4 bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700 transition hidden shadow-md"
+                onclick="retakeAssessment()">
+                🔄 Retake Pre-Assessment
+            </button>
+        </div>
+
+        <!-- Continue Course -->
+        <div id="continue_course_section" class="bg-white p-6 rounded-xl shadow-xl hidden border-l-8 border-green-500">
+            <h3 class="text-2xl font-semibold mb-4 text-gray-800">🚀 Continue Learning</h3>
+            <p class="text-gray-700">Jump back into your course and continue where you left off.</p>
+            <button id="continue_course_btn" class="mt-2 bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700 transition shadow-md">
+                Continue Course
+            </button>
+        </div>
+    </div>
+</div>
+
+
+    </div>
+
+    <script>
+        let userId = null;
+
+        async function fetchDashboardData() {
+            try {
+                // Fetch session details
+                const sessionResponse = await fetch("http://127.0.0.1:5000/check_session", { credentials: "include" });
+                const sessionData = await sessionResponse.json();
+                if (!sessionData.logged_in) {
+                    alert("User not logged in!");
+                    return;
+                }
+                userId = sessionData.user_id;
+                document.getElementById("student_name").textContent = sessionData.user_name;
+
+                // Fetch enrolled courses
+                fetchEnrolledCourses();
+
+                // Fetch pre-assessment score
+                fetchPreAssessmentScore();
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error);
+            }
+        }
+
+        async function fetchEnrolledCourses() {
+            try {
+                const response = await fetch("http://127.0.0.1:5000/get_enrolled_courses", { credentials: "include" });
+                const courses = await response.json();
+                const enrolledCoursesDiv = document.getElementById("enrolled_courses");
+                enrolledCoursesDiv.innerHTML = "";
+
+                if (courses.length === 0) {
+                    enrolledCoursesDiv.innerHTML = "<p class='text-gray-600 italic'>No courses enrolled yet.</p>";
+                    return;
+                }
+
+                // Display first enrolled course for "Continue Course"
+                const firstCourse = courses[0];
+                document.getElementById("continue_course_section").classList.remove("hidden");
+                document.getElementById("continue_course_btn").onclick = () => {
+                    window.location.href = `course_page.html?course=${firstCourse.id}`;
+                };
+
+                courses.forEach(course => {
+                    const courseItem = document.createElement("div");
+                    courseItem.className = "p-3 bg-white shadow-xl rounded-lg";
+                    courseItem.innerHTML = `
+                        <h4 class="font-semibold text-lg text-blue-700">${course.title}</h4>
+                        <p class="text-gray-700">${course.description}</p>
+                        <p class="text-sm text-gray-500">📆 Duration: ${course.estimated_duration_hours} hours | 📜 Modules: ${course.total_modules}</p>
+                        <button onclick="window.location.href='course_page.html?course=${course.course_id}'"
+                            class="mt-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                            Continue Learning
+                        </button>
+                    `;
+                    enrolledCoursesDiv.appendChild(courseItem);
+                });
+            } catch (error) {
+                console.error("Error fetching enrolled courses:", error);
+            }
+        }
+
+        async function fetchPreAssessmentScore() {
+            try {
+                const response = await fetch("http://127.0.0.1:5000/get_results", { credentials: "include" });
+                const results = await response.json();
+
+                console.log("API Response:", results); // Debugging
+
+                const scoreElement = document.getElementById("pre_assessment_score");
+                const retakeButton = document.getElementById("retake_assessment_btn");
+
+                if (results && results.marks !== undefined) {
+                    scoreElement.textContent = `${results.marks}/10`;
+                    retakeButton.classList.remove("hidden"); // Show retake button
+                } else {
+                    scoreElement.textContent = "Not Taken";
+                    retakeButton.classList.add("hidden"); // Hide retake button
+                }
+            } catch (error) {
+                console.error("Error fetching pre-assessment score:", error);
+                document.getElementById("pre_assessment_score").textContent = "Error Fetching";
+            }
+        }
+
+        // Function to handle retake
+        function retakeAssessment() {
+            // Redirect the user to the pre-assessment page
+            window.location.href = "pre_assessment.html"; // Change to your actual assessment page URL
+        }
+
+        document.addEventListener("DOMContentLoaded", fetchDashboardData);
+    </script>
+</body>
+</html>

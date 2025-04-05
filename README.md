@@ -3,6 +3,7 @@
 Welcome to the **AI-Powered Personalized Tutor**, an intelligent, adaptive learning platform that transforms digital education through deeply personalized learning experiences.
 
 🔗 **Repository:** [Personalized Tutor GitHub] (https://github.com/prasaduchukka/Personalized-tutor.git)
+ Demo vedio link: https://drive.google.com/file/d/17GCW8yOe-NWqseg6QjPLr0Dydi2c411b/view?usp=sharing
 
 ---
 📚 Overview

@@ -1,0 +1,201 @@
+Student_ID,Name,Age,Gender,Country,State,City,Parent_Occupation,Earning_Class,Student_Level,Course_Level,Pre_Assessment_Score,Avg_Ongoing_Assessment_Score,Material_Used,Material_Level,IQ_Score,Promotion_Status
+1,Student_1,16,Female,USA,California,Los Angeles,Doctor,Middle,Beginner,Basic,34,64.6,Interactive,Advanced,129,Promote
+2,Student_2,13,Other,UK,England,Manchester,Other,Middle,Intermediate,Intermediate,59,68.0,Textbook,Intermediate,110,Promote
+3,Student_3,17,Other,Canada,Various,Montreal,Doctor,Low,Advanced,Advanced,71,64.0,Textbook,Advanced,104,Not Promote
+4,Student_4,14,Male,India,Andhra Pradesh,Vijayawada,Teacher,Low,Beginner,Basic,29,69.4,Textbook,Intermediate,111,Promote
+5,Student_5,16,Male,India,Tamil Nadu,Chennai,Teacher,High,Intermediate,Intermediate,62,40.2,Video,Basic,117,Not Promote
+6,Student_6,19,Other,Australia,Various,Brisbane,Teacher,High,Beginner,Basic,12,39.8,Interactive,Intermediate,103,Not Promote
+7,Student_7,12,Female,India,Maharashtra,Pune,Teacher,Low,Intermediate,Intermediate,67,50.4,Video,Intermediate,116,Not Promote
+8,Student_8,16,Male,Australia,Various,Sydney,Business,Low,Beginner,Basic,31,57.4,Interactive,Intermediate,130,Promote
+9,Student_9,17,Other,USA,New York,Los Angeles,Other,High,Beginner,Basic,31,30.2,Interactive,Basic,129,Not Promote
+10,Student_10,14,Other,Canada,Various,Montreal,Doctor,Middle,Advanced,Advanced,72,47.6,Interactive,Advanced,117,Not Promote
+11,Student_11,13,Other,Australia,Various,Sydney,Doctor,Low,Beginner,Basic,38,62.0,Interactive,Advanced,115,Promote
+12,Student_12,17,Female,USA,New York,Los Angeles,Teacher,High,Intermediate,Intermediate,63,61.2,Interactive,Basic,138,Not Promote
+13,Student_13,17,Other,India,Maharashtra,Mumbai,Teacher,Middle,Intermediate,Intermediate,69,24.0,Interactive,Intermediate,91,Not Promote
+14,Student_14,12,Other,India,Andhra Pradesh,Chennai,Engineer,Low,Advanced,Advanced,98,45.8,Interactive,Advanced,114,Not Promote
+15,Student_15,15,Other,USA,Texas,Houston,Other,Middle,Intermediate,Intermediate,66,54.0,Video,Basic,92,Not Promote
+16,Student_16,14,Other,India,Tamil Nadu,Chennai,Business,High,Intermediate,Intermediate,61,67.6,Textbook,Advanced,97,Promote
+17,Student_17,11,Male,USA,California,Los Angeles,Doctor,Low,Intermediate,Intermediate,65,73.2,Textbook,Basic,133,Promote
+18,Student_18,17,Male,Australia,Various,Brisbane,Engineer,Middle,Beginner,Basic,43,29.8,Video,Intermediate,122,Not Promote
+19,Student_19,15,Other,Australia,Various,Sydney,Engineer,Low,Beginner,Basic,46,28.2,Video,Advanced,131,Not Promote
+20,Student_20,11,Female,USA,Texas,Los Angeles,Doctor,Middle,Intermediate,Intermediate,59,40.8,Video,Basic,124,Not Promote
+21,Student_21,14,Male,Australia,Various,Brisbane,Business,High,Advanced,Advanced,99,29.4,Video,Advanced,95,Not Promote
+22,Student_22,10,Other,Australia,Various,Sydney,Engineer,High,Beginner,Basic,24,55.8,Interactive,Advanced,128,Promote
+23,Student_23,19,Male,Australia,Various,Brisbane,Engineer,Low,Advanced,Advanced,100,51.0,Textbook,Advanced,112,Not Promote
+24,Student_24,15,Male,UK,England,Birmingham,Other,Middle,Intermediate,Intermediate,56,51.6,Interactive,Advanced,114,Not Promote
+25,Student_25,18,Female,Canada,Various,Toronto,Business,Low,Intermediate,Intermediate,69,48.0,Textbook,Basic,139,Not Promote
+26,Student_26,10,Other,India,Andhra Pradesh,Pune,Engineer,Low,Beginner,Basic,4,20.8,Textbook,Intermediate,132,Not Promote
+27,Student_27,19,Other,UK,England,London,Business,Middle,Intermediate,Intermediate,50,67.8,Video,Basic,108,Promote
+28,Student_28,12,Female,Australia,Various,Sydney,Doctor,Middle,Beginner,Basic,29,50.0,Interactive,Basic,94,Promote
+29,Student_29,16,Female,USA,Texas,New York City,Teacher,Middle,Intermediate,Intermediate,66,61.2,Video,Basic,140,Not Promote
+30,Student_30,13,Other,Australia,Various,Brisbane,Engineer,High,Intermediate,Intermediate,52,60.0,Interactive,Intermediate,100,Promote
+31,Student_31,18,Other,Canada,Various,Toronto,Other,Low,Beginner,Basic,44,54.8,Textbook,Advanced,101,Promote
+32,Student_32,12,Female,Australia,Various,Sydney,Doctor,Low,Beginner,Basic,13,43.2,Video,Advanced,99,Not Promote
+33,Student_33,14,Male,USA,Texas,Houston,Business,High,Beginner,Basic,29,35.4,Video,Advanced,97,Not Promote
+34,Student_34,12,Male,Canada,Various,Vancouver,Doctor,Middle,Intermediate,Intermediate,67,55.6,Textbook,Intermediate,113,Not Promote
+35,Student_35,16,Female,Australia,Various,Brisbane,Engineer,High,Intermediate,Intermediate,53,61.6,Textbook,Advanced,117,Promote
+36,Student_36,14,Male,Canada,Various,Toronto,Business,High,Advanced,Advanced,87,56.0,Textbook,Intermediate,130,Not Promote
+37,Student_37,18,Female,India,Telengana,Vijayawada,Teacher,High,Beginner,Basic,36,48.0,Video,Advanced,125,Not Promote
+38,Student_38,16,Male,India,Andhra Pradesh,Hyderabad,Doctor,Low,Intermediate,Intermediate,65,53.0,Interactive,Advanced,126,Not Promote
+39,Student_39,11,Male,Australia,Various,Sydney,Engineer,High,Intermediate,Intermediate,50,44.8,Video,Basic,110,Not Promote
+40,Student_40,13,Other,Canada,Various,Montreal,Other,Low,Beginner,Basic,45,57.6,Interactive,Intermediate,97,Promote
+41,Student_41,18,Other,USA,Texas,Houston,Business,Low,Advanced,Advanced,84,50.6,Video,Basic,98,Not Promote
+42,Student_42,11,Male,Australia,Various,Melbourne,Doctor,Low,Beginner,Basic,8,42.0,Video,Basic,136,Not Promote
+43,Student_43,19,Male,India,Tamil Nadu,Vijayawada,Doctor,Middle,Advanced,Advanced,84,48.4,Textbook,Basic,104,Not Promote
+44,Student_44,18,Other,India,Maharashtra,Mumbai,Teacher,Low,Intermediate,Intermediate,66,60.4,Interactive,Intermediate,137,Not Promote
+45,Student_45,19,Other,Australia,Various,Brisbane,Teacher,Low,Advanced,Advanced,94,48.8,Video,Intermediate,135,Not Promote
+46,Student_46,14,Other,Canada,Various,Montreal,Other,Middle,Intermediate,Intermediate,53,29.0,Video,Advanced,129,Not Promote
+47,Student_47,11,Female,India,Telengana,Mumbai,Other,Low,Beginner,Basic,11,47.6,Textbook,Basic,107,Not Promote
+48,Student_48,13,Male,Canada,Various,Toronto,Engineer,High,Beginner,Basic,36,35.4,Textbook,Advanced,131,Not Promote
+49,Student_49,16,Other,India,Maharashtra,Chennai,Engineer,High,Beginner,Basic,36,44.4,Interactive,Basic,109,Not Promote
+50,Student_50,17,Male,India,Tamil Nadu,Chennai,Other,Low,Advanced,Advanced,80,55.8,Video,Intermediate,95,Not Promote
+51,Student_51,12,Female,UK,England,London,Other,Middle,Intermediate,Intermediate,55,58.4,Interactive,Intermediate,101,Promote
+52,Student_52,10,Female,India,Maharashtra,Hyderabad,Business,High,Beginner,Basic,38,53.0,Video,Intermediate,91,Promote
+53,Student_53,13,Other,USA,New York,Los Angeles,Teacher,Middle,Beginner,Basic,45,39.2,Interactive,Basic,96,Not Promote
+54,Student_54,11,Female,Australia,Various,Melbourne,Engineer,Middle,Intermediate,Intermediate,60,76.2,Textbook,Intermediate,105,Promote
+55,Student_55,17,Male,Australia,Various,Melbourne,Teacher,High,Beginner,Basic,12,61.2,Video,Basic,92,Promote
+56,Student_56,13,Other,Canada,Various,Vancouver,Teacher,Middle,Intermediate,Intermediate,51,37.8,Interactive,Advanced,134,Not Promote
+57,Student_57,11,Male,India,Tamil Nadu,Chennai,Other,High,Intermediate,Intermediate,56,41.6,Textbook,Basic,92,Not Promote
+58,Student_58,15,Male,USA,New York,Los Angeles,Business,Middle,Intermediate,Intermediate,69,53.0,Textbook,Advanced,116,Not Promote
+59,Student_59,15,Female,Canada,Various,Montreal,Doctor,High,Intermediate,Intermediate,53,74.8,Interactive,Basic,139,Promote
+60,Student_60,19,Female,UK,England,Manchester,Business,Low,Intermediate,Intermediate,57,30.4,Video,Advanced,132,Not Promote
+61,Student_61,13,Female,Canada,Various,Montreal,Business,High,Advanced,Advanced,89,25.2,Video,Intermediate,129,Not Promote
+62,Student_62,15,Female,Canada,Various,Montreal,Teacher,High,Beginner,Basic,28,50.6,Textbook,Advanced,127,Promote
+63,Student_63,11,Female,India,Telengana,Chennai,Business,High,Advanced,Advanced,100,65.2,Video,Intermediate,122,Not Promote
+64,Student_64,19,Other,UK,England,London,Engineer,High,Beginner,Basic,44,34.0,Video,Intermediate,117,Not Promote
+65,Student_65,11,Male,Canada,Various,Vancouver,Teacher,Middle,Advanced,Advanced,83,53.0,Video,Advanced,90,Not Promote
+66,Student_66,19,Male,USA,California,Houston,Engineer,Low,Intermediate,Intermediate,59,50.8,Textbook,Basic,97,Not Promote
+67,Student_67,13,Male,USA,California,Houston,Doctor,High,Beginner,Basic,42,46.0,Interactive,Basic,126,Not Promote
+68,Student_68,17,Male,Australia,Various,Brisbane,Teacher,Middle,Beginner,Basic,33,56.4,Video,Basic,121,Promote
+69,Student_69,16,Female,UK,England,London,Doctor,Low,Advanced,Advanced,94,40.4,Textbook,Basic,137,Not Promote
+70,Student_70,18,Male,UK,England,Birmingham,Teacher,Low,Advanced,Advanced,95,25.6,Textbook,Basic,132,Not Promote
+71,Student_71,17,Other,Australia,Various,Sydney,Other,Low,Beginner,Basic,40,65.6,Interactive,Intermediate,126,Promote
+72,Student_72,14,Other,Canada,Various,Montreal,Business,Low,Advanced,Advanced,86,24.6,Video,Basic,93,Not Promote
+73,Student_73,11,Male,UK,England,Birmingham,Other,High,Advanced,Advanced,95,47.2,Video,Intermediate,119,Not Promote
+74,Student_74,14,Male,USA,California,Houston,Doctor,High,Advanced,Advanced,72,58.4,Interactive,Intermediate,95,Not Promote
+75,Student_75,17,Other,USA,New York,New York City,Business,Middle,Intermediate,Intermediate,55,51.4,Interactive,Intermediate,135,Not Promote
+76,Student_76,19,Other,India,Maharashtra,Chennai,Teacher,Middle,Intermediate,Intermediate,54,37.8,Textbook,Advanced,108,Not Promote
+77,Student_77,18,Female,UK,England,London,Business,Middle,Advanced,Advanced,74,41.0,Textbook,Advanced,121,Not Promote
+78,Student_78,18,Other,Canada,Various,Montreal,Engineer,Low,Advanced,Advanced,91,31.2,Interactive,Intermediate,98,Not Promote
+79,Student_79,10,Female,Australia,Various,Sydney,Business,Low,Intermediate,Intermediate,64,61.6,Video,Advanced,101,Not Promote
+80,Student_80,18,Female,Australia,Various,Brisbane,Engineer,High,Intermediate,Intermediate,66,49.2,Textbook,Basic,100,Not Promote
+81,Student_81,16,Female,Canada,Various,Vancouver,Business,Low,Beginner,Basic,8,60.8,Textbook,Basic,135,Promote
+82,Student_82,18,Female,India,Maharashtra,Chennai,Engineer,Low,Beginner,Basic,34,57.0,Video,Intermediate,105,Promote
+83,Student_83,17,Female,Australia,Various,Brisbane,Doctor,Low,Intermediate,Intermediate,69,46.8,Textbook,Basic,90,Not Promote
+84,Student_84,10,Male,UK,England,Manchester,Other,Middle,Advanced,Advanced,95,49.0,Video,Intermediate,134,Not Promote
+85,Student_85,17,Other,India,Tamil Nadu,Mumbai,Teacher,Middle,Advanced,Advanced,86,25.2,Video,Intermediate,110,Not Promote
+86,Student_86,17,Female,UK,England,London,Business,High,Advanced,Advanced,98,52.6,Video,Basic,119,Not Promote
+87,Student_87,12,Other,USA,New York,Los Angeles,Other,Low,Advanced,Advanced,96,64.4,Interactive,Advanced,102,Not Promote
+88,Student_88,10,Other,India,Andhra Pradesh,Guntur,Teacher,Low,Beginner,Basic,41,31.6,Interactive,Basic,123,Not Promote
+89,Student_89,17,Female,Australia,Various,Sydney,Teacher,High,Intermediate,Intermediate,52,74.0,Interactive,Basic,93,Promote
+90,Student_90,12,Male,India,Telengana,Chennai,Engineer,Low,Advanced,Advanced,87,32.4,Video,Intermediate,117,Not Promote
+91,Student_91,12,Female,India,Maharashtra,Chennai,Doctor,Low,Beginner,Basic,17,44.2,Video,Intermediate,127,Not Promote
+92,Student_92,10,Male,India,Andhra Pradesh,vishakapatnam,Doctor,Middle,Advanced,Advanced,99,74.8,Interactive,Intermediate,120,Not Promote
+93,Student_93,14,Other,India,Telengana,Mumbai,Other,High,Intermediate,Intermediate,66,59.6,Textbook,Intermediate,116,Not Promote
+94,Student_94,19,Male,UK,England,London,Doctor,High,Beginner,Basic,23,51.8,Video,Advanced,94,Promote
+95,Student_95,16,Male,USA,Texas,Los Angeles,Business,High,Intermediate,Intermediate,52,68.8,Textbook,Advanced,114,Promote
+96,Student_96,19,Male,Canada,Various,Montreal,Doctor,High,Intermediate,Intermediate,52,53.6,Textbook,Advanced,92,Promote
+97,Student_97,18,Other,India,Maharashtra,Guntur,Other,Middle,Beginner,Basic,37,38.0,Video,Intermediate,122,Not Promote
+98,Student_98,16,Other,Australia,Various,Sydney,Doctor,Middle,Beginner,Basic,12,76.4,Video,Intermediate,93,Promote
+99,Student_99,18,Male,India,Maharashtra,Vijayawada,Business,Low,Beginner,Basic,46,47.4,Textbook,Intermediate,114,Not Promote
+100,Student_100,17,Male,Australia,Various,Melbourne,Engineer,Low,Beginner,Basic,24,55.4,Textbook,Advanced,109,Promote
+101,Student_101,11,Female,UK,England,London,Other,Low,Beginner,Basic,8,50.4,Interactive,Intermediate,123,Promote
+102,Student_102,10,Male,Australia,Various,Sydney,Engineer,Low,Beginner,Basic,3,69.0,Interactive,Basic,115,Promote
+103,Student_103,16,Female,Canada,Various,Montreal,Engineer,Middle,Beginner,Basic,13,38.6,Video,Basic,94,Not Promote
+104,Student_104,16,Male,USA,New York,New York City,Engineer,High,Advanced,Advanced,74,58.4,Interactive,Intermediate,124,Not Promote
+105,Student_105,17,Female,Australia,Various,Melbourne,Teacher,Middle,Intermediate,Intermediate,51,47.4,Interactive,Basic,117,Not Promote
+106,Student_106,14,Other,Australia,Various,Melbourne,Teacher,Low,Beginner,Basic,10,39.0,Interactive,Basic,118,Not Promote
+107,Student_107,12,Male,USA,Texas,Houston,Engineer,Middle,Advanced,Advanced,78,55.2,Interactive,Advanced,98,Not Promote
+108,Student_108,17,Male,Canada,Various,Montreal,Other,High,Advanced,Advanced,93,57.8,Textbook,Intermediate,127,Not Promote
+109,Student_109,15,Male,India,Telengana,Guntur,Business,High,Advanced,Advanced,72,36.2,Video,Intermediate,139,Not Promote
+110,Student_110,12,Male,Australia,Various,Melbourne,Business,Middle,Intermediate,Intermediate,58,39.4,Interactive,Advanced,95,Not Promote
+111,Student_111,10,Female,USA,California,Houston,Doctor,Middle,Beginner,Basic,2,40.4,Textbook,Basic,108,Not Promote
+112,Student_112,12,Male,UK,England,London,Other,Middle,Advanced,Advanced,94,50.8,Textbook,Basic,133,Not Promote
+113,Student_113,14,Other,USA,Texas,Houston,Teacher,Low,Intermediate,Intermediate,51,22.2,Textbook,Intermediate,100,Not Promote
+114,Student_114,12,Other,UK,England,Birmingham,Engineer,Middle,Intermediate,Intermediate,61,26.0,Interactive,Basic,91,Not Promote
+115,Student_115,10,Male,Canada,Various,Toronto,Doctor,Middle,Intermediate,Intermediate,59,69.8,Interactive,Advanced,136,Promote
+116,Student_116,14,Other,India,Maharashtra,Pune,Business,Middle,Advanced,Advanced,78,57.0,Video,Advanced,133,Not Promote
+117,Student_117,19,Male,USA,New York,New York City,Teacher,High,Beginner,Basic,14,45.8,Interactive,Intermediate,133,Not Promote
+118,Student_118,16,Male,Australia,Various,Brisbane,Teacher,High,Advanced,Advanced,77,46.4,Interactive,Advanced,98,Not Promote
+119,Student_119,16,Other,Canada,Various,Toronto,Engineer,Low,Advanced,Advanced,94,41.8,Textbook,Advanced,110,Not Promote
+120,Student_120,18,Male,USA,California,Houston,Business,Low,Beginner,Basic,4,33.2,Video,Intermediate,113,Not Promote
+121,Student_121,19,Other,Australia,Various,Melbourne,Other,High,Beginner,Basic,10,45.8,Interactive,Advanced,123,Not Promote
+122,Student_122,19,Female,USA,New York,New York City,Teacher,High,Beginner,Basic,33,31.8,Interactive,Advanced,111,Not Promote
+123,Student_123,12,Male,UK,England,Birmingham,Engineer,High,Intermediate,Intermediate,64,49.2,Textbook,Advanced,92,Not Promote
+124,Student_124,16,Female,USA,Texas,Houston,Other,Middle,Beginner,Basic,37,53.0,Textbook,Basic,101,Promote
+125,Student_125,10,Other,USA,Texas,Houston,Business,Middle,Advanced,Advanced,77,57.4,Interactive,Intermediate,117,Not Promote
+126,Student_126,13,Female,USA,Texas,Houston,Teacher,High,Beginner,Basic,4,46.2,Video,Intermediate,119,Not Promote
+127,Student_127,13,Female,Canada,Various,Montreal,Other,Middle,Advanced,Advanced,85,62.4,Video,Intermediate,115,Not Promote
+128,Student_128,14,Other,USA,New York,New York City,Other,Middle,Intermediate,Intermediate,67,65.4,Textbook,Basic,137,Not Promote
+129,Student_129,16,Female,Australia,Various,Brisbane,Other,Low,Advanced,Advanced,75,30.4,Textbook,Basic,110,Not Promote
+130,Student_130,16,Female,UK,England,Birmingham,Teacher,High,Advanced,Advanced,74,42.2,Interactive,Intermediate,117,Not Promote
+131,Student_131,13,Other,UK,England,Manchester,Teacher,High,Beginner,Basic,47,61.0,Textbook,Basic,115,Promote
+132,Student_132,16,Female,USA,California,Houston,Doctor,Middle,Beginner,Basic,12,37.6,Interactive,Intermediate,122,Not Promote
+133,Student_133,12,Other,Canada,Various,Toronto,Business,High,Advanced,Advanced,97,40.4,Video,Basic,110,Not Promote
+134,Student_134,15,Female,Canada,Various,Vancouver,Engineer,Low,Beginner,Basic,4,43.8,Video,Advanced,124,Not Promote
+135,Student_135,11,Other,Australia,Various,Melbourne,Other,Low,Intermediate,Intermediate,62,53.2,Interactive,Advanced,123,Not Promote
+136,Student_136,19,Other,USA,New York,Houston,Doctor,Low,Intermediate,Intermediate,66,53.6,Textbook,Intermediate,130,Not Promote
+137,Student_137,18,Female,UK,England,Birmingham,Engineer,High,Beginner,Basic,49,56.8,Video,Basic,140,Promote
+138,Student_138,14,Female,Canada,Various,Toronto,Doctor,High,Intermediate,Intermediate,57,37.4,Textbook,Basic,136,Not Promote
+139,Student_139,15,Female,USA,California,Los Angeles,Teacher,High,Beginner,Basic,44,32.6,Video,Advanced,107,Not Promote
+140,Student_140,13,Male,Canada,Various,Montreal,Other,High,Advanced,Advanced,99,42.6,Interactive,Advanced,100,Not Promote
+141,Student_141,19,Male,Canada,Various,Toronto,Engineer,High,Advanced,Advanced,98,51.2,Interactive,Basic,112,Not Promote
+142,Student_142,16,Male,UK,England,Manchester,Engineer,Low,Intermediate,Intermediate,68,42.2,Interactive,Basic,137,Not Promote
+143,Student_143,18,Other,India,Maharashtra,Vijayawada,Engineer,Middle,Beginner,Basic,2,50.6,Video,Basic,111,Promote
+144,Student_144,16,Female,Australia,Various,Sydney,Engineer,Low,Beginner,Basic,39,44.8,Textbook,Basic,106,Not Promote
+145,Student_145,10,Other,Australia,Various,Melbourne,Engineer,High,Intermediate,Intermediate,51,59.6,Textbook,Basic,94,Promote
+146,Student_146,10,Male,UK,England,Manchester,Doctor,Low,Advanced,Advanced,77,47.6,Textbook,Basic,133,Not Promote
+147,Student_147,18,Female,Canada,Various,Toronto,Other,High,Intermediate,Intermediate,62,12.0,Video,Intermediate,100,Not Promote
+148,Student_148,18,Other,USA,Texas,Los Angeles,Teacher,High,Advanced,Advanced,82,30.2,Video,Basic,119,Not Promote
+149,Student_149,13,Female,Canada,Various,Montreal,Teacher,Low,Beginner,Basic,32,54.2,Video,Advanced,104,Promote
+150,Student_150,18,Other,UK,England,Birmingham,Teacher,High,Advanced,Advanced,75,54.8,Video,Intermediate,116,Not Promote
+151,Student_151,12,Female,Australia,Various,Brisbane,Teacher,Middle,Intermediate,Intermediate,68,44.8,Video,Basic,124,Not Promote
+152,Student_152,16,Male,Canada,Various,Vancouver,Doctor,High,Beginner,Basic,15,55.6,Textbook,Advanced,122,Promote
+153,Student_153,15,Male,Australia,Various,Brisbane,Business,Middle,Intermediate,Intermediate,57,52.4,Video,Intermediate,109,Not Promote
+154,Student_154,17,Female,USA,New York,Los Angeles,Other,Middle,Intermediate,Intermediate,50,65.4,Video,Advanced,105,Promote
+155,Student_155,18,Other,Australia,Various,Brisbane,Engineer,High,Advanced,Advanced,96,51.2,Textbook,Basic,123,Not Promote
+156,Student_156,14,Male,Australia,Various,Brisbane,Business,Low,Intermediate,Intermediate,65,31.2,Video,Basic,91,Not Promote
+157,Student_157,10,Male,India,Tamil Nadu,Pune,Teacher,Middle,Advanced,Advanced,78,53.8,Textbook,Basic,124,Not Promote
+158,Student_158,12,Male,India,Telengana,Hyderabad,Business,Low,Beginner,Basic,12,50.2,Textbook,Basic,129,Promote
+159,Student_159,19,Female,India,Tamil Nadu,Vijayawada,Other,Middle,Advanced,Advanced,80,51.2,Interactive,Intermediate,117,Not Promote
+160,Student_160,17,Female,Australia,Various,Sydney,Engineer,High,Beginner,Basic,44,41.4,Interactive,Intermediate,136,Not Promote
+161,Student_161,15,Other,UK,England,Birmingham,Engineer,High,Advanced,Advanced,94,30.6,Interactive,Advanced,128,Not Promote
+162,Student_162,17,Other,Australia,Various,Brisbane,Other,Middle,Intermediate,Intermediate,59,54.2,Interactive,Basic,95,Not Promote
+163,Student_163,18,Other,UK,England,Birmingham,Other,High,Advanced,Advanced,73,42.0,Video,Advanced,98,Not Promote
+164,Student_164,13,Female,UK,England,London,Teacher,Middle,Advanced,Advanced,100,41.8,Interactive,Intermediate,109,Not Promote
+165,Student_165,10,Female,India,Tamil Nadu,vishakapatnam,Engineer,High,Beginner,Basic,26,60.6,Textbook,Basic,90,Promote
+166,Student_166,10,Other,Canada,Various,Toronto,Business,Low,Intermediate,Intermediate,55,39.2,Video,Basic,97,Not Promote
+167,Student_167,19,Other,USA,Texas,New York City,Doctor,High,Advanced,Advanced,97,32.0,Interactive,Intermediate,112,Not Promote
+168,Student_168,13,Female,India,Telengana,Chennai,Doctor,Low,Intermediate,Intermediate,56,66.6,Textbook,Intermediate,92,Promote
+169,Student_169,16,Other,India,Maharashtra,vishakapatnam,Other,High,Advanced,Advanced,74,48.0,Video,Intermediate,93,Not Promote
+170,Student_170,11,Male,Canada,Various,Montreal,Teacher,Low,Advanced,Advanced,80,45.8,Video,Intermediate,114,Not Promote
+171,Student_171,12,Female,USA,California,Houston,Doctor,High,Intermediate,Intermediate,62,47.0,Interactive,Intermediate,136,Not Promote
+172,Student_172,10,Other,Australia,Various,Sydney,Engineer,Low,Advanced,Advanced,95,45.0,Video,Basic,127,Not Promote
+173,Student_173,14,Female,Australia,Various,Melbourne,Other,Middle,Intermediate,Intermediate,68,44.0,Textbook,Intermediate,104,Not Promote
+174,Student_174,10,Male,India,Maharashtra,Chennai,Business,Middle,Advanced,Advanced,100,28.2,Video,Basic,110,Not Promote
+175,Student_175,17,Female,USA,California,Houston,Other,Low,Beginner,Basic,22,56.8,Textbook,Basic,124,Promote
+176,Student_176,10,Female,India,Andhra Pradesh,vishakapatnam,Business,High,Intermediate,Intermediate,59,58.8,Video,Intermediate,135,Not Promote
+177,Student_177,10,Female,UK,England,London,Other,Low,Advanced,Advanced,79,49.0,Interactive,Intermediate,103,Not Promote
+178,Student_178,11,Female,India,Andhra Pradesh,vishakapatnam,Other,High,Advanced,Advanced,80,31.2,Textbook,Basic,125,Not Promote
+179,Student_179,11,Male,India,Maharashtra,Guntur,Other,Middle,Beginner,Basic,29,62.0,Video,Intermediate,101,Promote
+180,Student_180,15,Female,Australia,Various,Sydney,Business,High,Intermediate,Intermediate,56,56.6,Video,Intermediate,106,Promote
+181,Student_181,16,Female,Australia,Various,Melbourne,Business,Middle,Advanced,Advanced,100,50.6,Video,Intermediate,128,Not Promote
+182,Student_182,14,Other,Australia,Various,Sydney,Other,High,Beginner,Basic,17,71.8,Textbook,Advanced,98,Promote
+183,Student_183,10,Female,UK,England,Birmingham,Doctor,High,Advanced,Advanced,73,41.0,Textbook,Basic,124,Not Promote
+184,Student_184,10,Other,Australia,Various,Sydney,Teacher,High,Intermediate,Intermediate,51,43.4,Textbook,Advanced,102,Not Promote
+185,Student_185,12,Male,USA,Texas,New York City,Teacher,Low,Advanced,Advanced,83,49.8,Interactive,Intermediate,104,Not Promote
+186,Student_186,11,Male,Canada,Various,Montreal,Teacher,Low,Advanced,Advanced,82,64.2,Interactive,Advanced,107,Not Promote
+187,Student_187,14,Male,USA,New York,New York City,Business,Middle,Advanced,Advanced,98,58.2,Textbook,Intermediate,140,Not Promote
+188,Student_188,19,Male,USA,California,Los Angeles,Business,Middle,Advanced,Advanced,81,61.8,Video,Advanced,122,Not Promote
+189,Student_189,15,Other,Australia,Various,Melbourne,Doctor,Low,Beginner,Basic,38,43.4,Interactive,Intermediate,95,Not Promote
+190,Student_190,16,Female,Canada,Various,Toronto,Teacher,Middle,Beginner,Basic,1,71.0,Textbook,Advanced,116,Promote
+191,Student_191,13,Male,Canada,Various,Toronto,Teacher,Low,Intermediate,Intermediate,62,35.4,Video,Advanced,112,Not Promote
+192,Student_192,16,Female,Canada,Various,Vancouver,Other,High,Beginner,Basic,45,28.0,Interactive,Advanced,116,Not Promote
+193,Student_193,17,Other,UK,England,London,Business,Middle,Beginner,Basic,26,29.4,Video,Basic,123,Not Promote
+194,Student_194,10,Other,Australia,Various,Brisbane,Teacher,Middle,Intermediate,Intermediate,66,49.8,Video,Advanced,135,Not Promote
+195,Student_195,15,Other,Canada,Various,Vancouver,Doctor,Low,Beginner,Basic,40,32.2,Video,Basic,127,Not Promote
+196,Student_196,17,Male,UK,England,Birmingham,Doctor,Middle,Beginner,Basic,16,68.0,Video,Intermediate,103,Promote
+197,Student_197,14,Female,India,Tamil Nadu,Hyderabad,Teacher,Middle,Intermediate,Intermediate,57,58.4,Interactive,Advanced,125,Promote
+198,Student_198,13,Female,India,Andhra Pradesh,vishakapatnam,Business,High,Intermediate,Intermediate,51,57.6,Interactive,Intermediate,97,Promote
+199,Student_199,11,Female,UK,England,Birmingham,Doctor,Middle,Intermediate,Intermediate,62,68.0,Interactive,Intermediate,124,Promote
+200,Student_200,15,Other,UK,England,Manchester,Other,High,Advanced,Advanced,72,40.2,Textbook,Advanced,108,Not Promote

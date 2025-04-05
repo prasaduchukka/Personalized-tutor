@@ -1,0 +1,29 @@
+# Web Framework & Backend
+Flask==2.3.2
+Flask-Cors==3.0.10
+Flask-SQLAlchemy==3.1.1
+
+# Database
+mysql-connector-python==8.0.33
+sqlite3-binary==0.0.1  # Optional for local SQLite support
+
+# Security & Auth
+bcrypt==4.0.1
+python-dotenv==1.0.0
+
+# AI & ML
+openai==1.3.7
+transformers==4.36.2
+huggingface-hub==0.20.2
+scikit-learn==1.3.2
+numpy==1.24.4
+pandas==2.2.2
+
+# Voice Interaction
+pyttsx3==2.90
+SpeechRecognition==3.10
+PyAudio==0.2.11       # Note: may require system-specific install (e.g., pipwin on Windows)
+PyWhatKit==5.4
+
+# Utilities
+requests==2.31.0

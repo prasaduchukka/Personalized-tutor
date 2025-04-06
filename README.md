@@ -20,6 +20,7 @@ With **real-time performance tracking**, **AI-driven content recommendations**, 
 
 - ✨ **User Authentication**  
   Secure login/signup for individualized learning access.
+![Screenshot 2025-04-06 005803](https://github.com/user-attachments/assets/b681dff7-211f-4068-a7d0-de32da113c43)
 
 - 📘 **Pre-Assessment Evaluation**  
   Understands student knowledge levels before beginning the course.
